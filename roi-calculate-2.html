@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI Calculator</title>
+<style>
+  .container {
+    max-width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input[type="range"] {
+    width: 100%;
+  }
+  
+  .input-group .range-value {
+    display: inline-block;
+    float: right;
+  }
+  
+  .btn-calculate {
+    display: block;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  @media (min-width: 768px) {
+    .container {
+      width: 400px;
+      margin:auto;
+    }
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="input-group">
+    <label for="salesAppointments">Sales Appointments per Month:</label>
+    <input type="range" id="salesAppointmentsRange" min="5" max="20" value="12" oninput="updateRangeValue('salesAppointments')">
+    <span class="range-value" id="salesAppointmentsValue">12</span>
+  </div>
+
+  <div class="input-group">
+    <label for="conversionRate">Conversion Rate from Appointment to Paying Client (%):</label>
+    <input type="range" id="conversionRateRange" min="5" max="50" value="15" oninput="updateRangeValue('conversionRate')">
+    <span class="range-value" id="conversionRateValue">15</span>
+  </div>
+
+  <div class="input-group">
+    <label for="annualContractValue">Average Annual Contract Value:</label>
+    <input type="range" id="annualContractValueRange" min="1000" max="200000" value="15000" oninput="updateRangeValue('annualContractValue')">
+    <span class="range-value" id="annualContractValueValue">15000</span>
+  </div>
+
+  <div class="input-group">
+    <label for="salesCycleLength">Average Sales Cycle Length (months):</label>
+    <input type="range" id="salesCycleLengthRange" min="1" max="9" value="3" oninput="updateRangeValue('salesCycleLength')">
+    <span class="range-value" id="salesCycleLengthValue">3</span>
+  </div>
+
+  <button class="btn-calculate" onclick="calculateROI()">Calculate ROI</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+function updateRangeValue(id) {
+  var rangeElement = document.getElementById(id + 'Range');
+  var valueElement = document.getElementById(id + 'Value');
+  valueElement.textContent = rangeElement.value;
+}
+
+function calculateROI() {
+  var salesAppointments = parseInt(document.getElementById('salesAppointmentsRange').value);
+  var conversionRate = parseInt(document.getElementById('conversionRateRange').value);
+  var annualContractValue = parseInt(document.getElementById('annualContractValueRange').value);
+  var salesCycleLength = parseInt(document.getElementById('salesCycleLengthRange').value);
+
+  var dealsClosedPerMonth = salesAppointments * (conversionRate / 100);
+  var monthlyRevenue = dealsClosedPerMonth * (annualContractValue / 12);
+  var annualRevenue = monthlyRevenue * 12;
+
+  var investment = salesCycleLength * monthlyRevenue;
+  var roi = ((annualRevenue - investment) / investment) * 100;
+
+  var resultElement = document.getElementById('result');
+  resultElement.innerHTML = "With " + salesAppointments + " appointments per month, you will close " + Math.round(dealsClosedPerMonth) + " deal(s) per month, and create $" + annualRevenue.toFixed(2) + " in annual revenue. Partnering with us will help you achieve " + roi.toFixed(2) + "% ROI during the first 12 months.";
+}
+</script>
+</body>
+</html>

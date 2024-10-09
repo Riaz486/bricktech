@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI Calculator</title>
+  <style>
+    .container {
+      max-width: 100%;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .btn-calculate {
+      background-color: #4CAF50;
+      color: white;
+      width: 100%;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+    .container {
+      width: 400px;
+      margin:auto;
+    }
+  }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="input-group">
+      <label for="salesAppointments">Sales Appointments per Month:</label>
+      <input type="number" id="salesAppointments" value="12">
+    </div>
+
+    <div class="input-group">
+      <label for="conversionRate">Conversion Rate from Appointment to Paying Client (%):</label>
+      <input type="number" id="conversionRate" value="15">
+    </div>
+
+    <div class="input-group">
+      <label for="annualContractValue">Average Annual Contract Value:</label>
+      <input type="number" id="annualContractValue" value="15000">
+    </div>
+
+    <div class="input-group">
+      <label for="salesCycleLength">Average Sales Cycle Length (months):</label>
+      <input type="number" id="salesCycleLength" value="3">
+    </div>
+
+    <button class="btn-calculate" onclick="calculateROI()">Calculate ROI</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateROI() {
+      var salesAppointments = parseInt(document.getElementById('salesAppointments').value);
+      var conversionRate = parseInt(document.getElementById('conversionRate').value);
+      var annualContractValue = parseInt(document.getElementById('annualContractValue').value);
+      var salesCycleLength = parseInt(document.getElementById('salesCycleLength').value);
+
+      var dealsClosedPerMonth = salesAppointments * (conversionRate / 100);
+      var monthlyRevenue = dealsClosedPerMonth * (annualContractValue / 12);
+      var annualRevenue = monthlyRevenue * 12;
+
+      var investment = salesCycleLength * monthlyRevenue;
+      var roi = ((annualRevenue - investment) / investment) * 100;
+
+      var resultElement = document.getElementById('result');
+      resultElement.innerHTML = "With " + salesAppointments + " appointments per month, you will close " + Math.round(dealsClosedPerMonth) + " deal(s) per month, and create $" + annualRevenue.toFixed(2) + " in annual revenue. Partnering with us will help you achieve " + roi.toFixed(2) + "% ROI during the first 12 months.";
+    }
+  </script>
+</body>
+</html>
